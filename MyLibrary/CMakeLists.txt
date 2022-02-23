@@ -2,7 +2,7 @@ set(MYNOID_HEADERS
     "Trajectory_planner.h"
     )
 
-sset(MYNOID_SOURCES
+set(MYNOID_SOURCES
      "Trajectory_planner.cpp"
      )
 
