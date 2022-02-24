@@ -9,8 +9,7 @@ using namespace cnoid;
 
 void TrajectoryPlanner::InitializeTrajectoryPlanner(Vector3 CoMin, Vector3 vCoMin, double _Tssp, double _zVRP, double _dt){
   //パラメータ設定をする関数
-  //最大歩数を設定
-  Nmax = _support_leg.size();
+
   //単脚支持期の時間を設定
   Tssp = _Tssp;
   //ΔZvrpを設定
@@ -34,6 +33,7 @@ void TrajectoryPlanner::SetCMPandCP(vector<Vector3> support_point){
   //これがないと軌道が求められない
 
   //着地点を目標CMP位置に設定
+  Nmax = support_point.size();
   for(int i=0;i<Nmax;i++){
     CMP_d.push_back(support_point[i]);
     //式7
