@@ -1,4 +1,5 @@
 #include "Trajectory_planner.h"
+#include "Footprint_planner.h"
 #include<cnoid/SimpleController>
 #include<cnoid/Body>
 #include<cnoid/EigenTypes>
@@ -29,18 +30,29 @@ class Biped_Online_Controller_test : public SimpleController
   //シミュレータに関する値
   double startTime;
   double total_t = 0.0;
+  //テスト：Footprint_planner.cppのバグ発見
+  FootPrintPlanner footprint_planner;
   //テスト：Trajectory_planner.cppのバグを発見するため
   TrajectoryPlanner trajectory_planner;
   //値確認用
   ofstream ofs;
 
-  //以下固有パラメータ
+  //以下足を踏み出す位置に関する値
+  //Vector6がめちゃくちゃ使いにくいので苦肉の策でvector<vector>
+  //もはやVector3を２倍用意したほうがいいのか？
+  vector<vector<double>> support_footpoint = {{0.0,   0.15, 0.0, 0.0, 0.0, 0.0},
+                                              {0.15, -0.15, 0.0, 0.0, 0.0, 0.0},
+                                              {0.15,  0.15, 0.0, 0.0, 0.0, 0.0}};
+  int sup_RoL =  1; //左足支持からスタート
+  vector<vector<double>> initial_footpoint = {{0.0, -0.15, 0.0, 0.0, 0.0, 0.0},
+                                              {0.0,  0.15, 0.0, 0.0, 0.0, 0.0}};
+  vector<vector<double>> end_footpoint = {{0.15, -0.15, 0.0, 0.0, 0.0, 0.0},
+                                          {0.15,  0.15, 0.0, 0.0, 0.0, 0.0}};
+
+  //以下軌道生成に必要なパラメータ
   const double zVRP = 0.75;
   Vector3 CoMin = Vector3(0.0, 0.0, zVRP);
   Vector3 vCoMin = Vector3(0.0, 0.0, 0.0);
-  vector<Vector3> support_point = {Vector3(0.0,   0.15, 0.0),
-                                   Vector3(0.15, -0.15, 0.0),
-                                   Vector3(0.15,  0.15, 0.0)};
   const double Tssp = 0.800;
   const double dt = 0.001;
   const double pi = 3.141592;
@@ -70,6 +82,11 @@ public:
 
     ofs.open("/home/yoshihiro/choreonoid/ext/Humanoid/Trajectory.csv");
 
+    //着地位置計画クラスを初期化
+    footprint_planner.InitializeFootPrintPlanner(support_footpoint, sup_RoL, initial_footpoint, end_footpoint);
+    vector<FootprintData> support_point = footprint_planner.support_point.datas;
+
+    //軌道生成クラスを初期化
     trajectory_planner.InitializeTrajectoryPlanner(CoMin, vCoMin, Tssp, zVRP, dt);
     trajectory_planner.SetCMPandCP(support_point);
     return true;

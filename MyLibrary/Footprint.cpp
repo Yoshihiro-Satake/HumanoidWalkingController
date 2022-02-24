@@ -5,7 +5,8 @@
 using namespace std;
 using namespace cnoid;
 
-void Footprints::SetFootprints(Vector6 data, int _RightOrLeft){
+//Vector6はかなり使いにくい
+void Footprints::SetFootprints(vector<double> data, int _RightOrLeft){
   //着地位置姿勢データを追加する。
   FootprintData footprint;
   footprint.RightOrLeft = _RightOrLeft;

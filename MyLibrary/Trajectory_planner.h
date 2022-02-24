@@ -1,6 +1,7 @@
 #ifndef TRAJECTORY_PLANNER_H_
 #define TRAJECTORY_PLANNER_H_
 
+#include "Footprint.h"
 #include<iostream>
 #include<cnoid/EigenTypes>
 #include<vector>
@@ -38,7 +39,7 @@ public:
   double pi = 3.141592;
 
   void InitializeTrajectoryPlanner(Vector3 CoMin, Vector3 vCoMin, double _Tssp, double _zVRP, double _dt);
-  void SetCMPandCP(vector<Vector3> support_point);
+  void SetCMPandCP(vector<FootprintData> support_point);
   void SSPtrajectory();
 
 };
