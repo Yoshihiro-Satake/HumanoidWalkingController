@@ -7,12 +7,10 @@
 using namespace std;
 using namespace cnoid;
 
-void TrajectoryPlanner::InitializeTrajectoryPlanner(Vector3 CoMin, Vector3 vCoMin, vector<int> _support_leg, double _Tssp, double _zVRP, double _dt){
+void TrajectoryPlanner::InitializeTrajectoryPlanner(Vector3 CoMin, Vector3 vCoMin, double _Tssp, double _zVRP, double _dt){
   //パラメータ設定をする関数
   //最大歩数を設定
   Nmax = _support_leg.size();
-  //support_legによってどちらが支持脚か判断する
-  support_leg = _support_leg;
   //単脚支持期の時間を設定
   Tssp = _Tssp;
   //ΔZvrpを設定

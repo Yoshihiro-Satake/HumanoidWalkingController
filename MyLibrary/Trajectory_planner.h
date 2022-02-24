@@ -30,7 +30,6 @@ public:
   int n;                   //今何歩目かカウントする
   double zVRP;             //ΔZvrp
   double Tssp;             //SSPの時間
-  vector<int> support_leg; //右足か左足か判断に使う。0なら右が支持脚
   double b;                //時定数
   double dt;               //制御サイクル
   double t;                //1歩内の時間、つまり0<=t<=Tssp
@@ -38,7 +37,7 @@ public:
   double g = 9.81;
   double pi = 3.141592;
 
-  void InitializeTrajectoryPlanner(Vector3 CoMin, Vector3 vCoMin, vector<int> _support_leg, double _Tssp, double _zVRP, double _dt);
+  void InitializeTrajectoryPlanner(Vector3 CoMin, Vector3 vCoMin, double _Tssp, double _zVRP, double _dt);
   void SetCMPandCP(vector<Vector3> support_point);
   void SSPtrajectory();
 

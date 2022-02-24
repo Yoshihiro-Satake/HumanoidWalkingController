@@ -5,9 +5,10 @@
 using namespace std;
 using namespace cnoid;
 
-void Footprints::SetFootprints(Vector6 data){
+void Footprints::SetFootprints(Vector6 data, int _RightOrLeft){
   //着地位置姿勢データを追加する。
   FootprintData footprint;
+  footprint.RightOrLeft = _RightOrLeft;
   footprint.foot_position = Vector3(data[0], data[1], data[2]);
   Matrix3d Rz;
   Rz << cos(data[3]), -sin(data[3]), 0,
