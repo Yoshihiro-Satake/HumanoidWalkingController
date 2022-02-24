@@ -39,7 +39,7 @@ class Biped_Online_Controller_test : public SimpleController
   Vector3 CoMin = Vector3(0.0, 0.0, zVRP);
   Vector3 vCoMin = Vector3(0.0, 0.0, 0.0);
   vector<int> support_leg = {1,0,1};
-  vector<Vector3> landing_point = {Vector3(0.0,   0.15, 0.0),
+  vector<Vector3> support_point = {Vector3(0.0,   0.15, 0.0),
                                    Vector3(0.15, -0.15, 0.0),
                                    Vector3(0.15,  0.15, 0.0)};
   const double Tssp = 0.800;
@@ -71,8 +71,8 @@ public:
 
     ofs.open("/home/yoshihiro/choreonoid/ext/Humanoid/Trajectory.csv");
 
-    trajectory_planner.Initialize(CoMin, vCoMin, support_leg, Tssp, zVRP, dt);
-    trajectory_planner.SetPoint(landing_point);
+    trajectory_planner.InitializeTrajectoryPlanner(CoMin, vCoMin, support_leg, Tssp, zVRP, dt);
+    trajectory_planner.SetCMPandCP(support_point);
     return true;
   }
   virtual bool control() override
