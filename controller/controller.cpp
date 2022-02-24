@@ -38,7 +38,6 @@ class Biped_Online_Controller_test : public SimpleController
   const double zVRP = 0.75;
   Vector3 CoMin = Vector3(0.0, 0.0, zVRP);
   Vector3 vCoMin = Vector3(0.0, 0.0, 0.0);
-  vector<int> support_leg = {1,0,1};
   vector<Vector3> support_point = {Vector3(0.0,   0.15, 0.0),
                                    Vector3(0.15, -0.15, 0.0),
                                    Vector3(0.15,  0.15, 0.0)};
@@ -71,7 +70,7 @@ public:
 
     ofs.open("/home/yoshihiro/choreonoid/ext/Humanoid/Trajectory.csv");
 
-    trajectory_planner.InitializeTrajectoryPlanner(CoMin, vCoMin, support_leg, Tssp, zVRP, dt);
+    trajectory_planner.InitializeTrajectoryPlanner(CoMin, vCoMin, Tssp, zVRP, dt);
     trajectory_planner.SetCMPandCP(support_point);
     return true;
   }

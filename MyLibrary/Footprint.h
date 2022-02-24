@@ -13,7 +13,7 @@ struct FootprintData{
   //クウォータ二オンがよくわからない
   Vector3 foot_position;   //足の3次元座標(足裏の足首関節直下をここにもってくる)
   Matrix3d R;              //回転行列
-  int RightOrLeft;         //右足か左足か
+  int RightOrLeft;         //右足か左足か。1なら右-1なら左
 };
 
 class Footprints{
