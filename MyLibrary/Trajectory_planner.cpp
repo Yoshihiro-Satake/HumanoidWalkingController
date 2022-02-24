@@ -7,7 +7,7 @@
 using namespace std;
 using namespace cnoid;
 
-void TrajectoryPlanner::Initialize(Vector3 CoMin, Vector3 vCoMin, vector<int> _support_leg, double _Tssp, double _zVRP, double _dt){
+void TrajectoryPlanner::InitializeTrajectoryPlanner(Vector3 CoMin, Vector3 vCoMin, vector<int> _support_leg, double _Tssp, double _zVRP, double _dt){
   //パラメータ設定をする関数
   //最大歩数を設定
   Nmax = _support_leg.size();
@@ -31,13 +31,13 @@ void TrajectoryPlanner::Initialize(Vector3 CoMin, Vector3 vCoMin, vector<int> _s
   n = 0;
 }
 
-void TrajectoryPlanner::SetPoint(vector<Vector3> landing_point){
+void TrajectoryPlanner::SetCMPandCP(vector<Vector3> support_point){
   //CMP,VRP,CPin,CPenを求める。
   //これがないと軌道が求められない
 
   //着地点を目標CMP位置に設定
   for(int i=0;i<Nmax;i++){
-    CMP_d.push_back(landing_point[i]);
+    CMP_d.push_back(support_point[i]);
     //式7
     VRP_d.push_back(CMP_d[i] + Vector3(0.0, 0.0, zVRP));
   }

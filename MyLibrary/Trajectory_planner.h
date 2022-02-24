@@ -38,8 +38,8 @@ public:
   double g = 9.81;
   double pi = 3.141592;
 
-  void Initialize(Vector3 CoMin, Vector3 vCoMin, vector<int> _support_leg, double _Tssp, double _zVRP, double _dt);
-  void SetPoint(vector<Vector3> landing_point);
+  void InitializeTrajectoryPlanner(Vector3 CoMin, Vector3 vCoMin, vector<int> _support_leg, double _Tssp, double _zVRP, double _dt);
+  void SetCMPandCP(vector<Vector3> support_point);
   void SSPtrajectory();
 
 };
