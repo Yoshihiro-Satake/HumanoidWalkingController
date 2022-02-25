@@ -2,6 +2,7 @@
 #define TRAJECTORY_PLANNER_H_
 
 #include "Footprint.h"
+#include "Footprint_planner.h"
 #include<iostream>
 #include<cnoid/EigenTypes>
 #include<vector>
@@ -26,6 +27,14 @@ public:
   //ZMP,CMP,に関するパラメータ
   vector<Vector3>  CMP_d;   //目標CMP位置
   vector<Vector3>  VRP_d;   //目標VRP位置
+  //ゆう客に関するパラメータ
+  vector<Vector3> Ankle_d[2]; //目標足首座標
+  Matrix3d FootRotation_d[2]; //目標足姿勢
+  //以下がFootstepplannerからの入力となる
+  vector<FootprintData> support_point;     //支持脚位置
+  vector<FootprintData> initial_footpoint; //足の初期位置
+  vector<FootprintData> end_footpoint;     //足の終端位置
+
   //その他歩行に関するパラメータ
   int Nmax;                //歩数
   int n;                   //今何歩目かカウントする
@@ -38,9 +47,11 @@ public:
   double g = 9.81;
   double pi = 3.141592;
 
-  void InitializeTrajectoryPlanner(Vector3 CoMin, Vector3 vCoMin, double _Tssp, double _zVRP, double _dt);
-  void SetCMPandCP(vector<FootprintData> support_point);
+  void InitializeTrajectoryPlanner(FootPrintPlanner _footprint_planner, Vector3 CoMin, Vector3 vCoMin, double _Tssp, double _zVRP, double _dt);
+  void SetCMPandCP();
   void SSPtrajectory();
+  void LegTrajectory();
+  void AllTrajectoryPlanner();
 
 };
 #endif

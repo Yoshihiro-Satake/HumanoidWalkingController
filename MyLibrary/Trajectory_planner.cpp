@@ -7,8 +7,17 @@
 using namespace std;
 using namespace cnoid;
 
-void TrajectoryPlanner::InitializeTrajectoryPlanner(Vector3 CoMin, Vector3 vCoMin, double _Tssp, double _zVRP, double _dt){
+void TrajectoryPlanner::InitializeTrajectoryPlanner(FootPrintPlanner _footprint_planner, Vector3 CoMin, Vector3 vCoMin, double _Tssp, double _zVRP, double _dt){
   //パラメータ設定をする関数
+
+  //FootPrintPlannerからの入力
+  for(int i=0;i<_footprint_planner.support_point.datas.size();i++){
+    support_point.push_back(_footprint_planner.support_point.datas[i]);
+  }
+  for(int i=0;i<_footprint_planner.initial_footpoint.datas.size();i++){
+    initial_footpoint.push_back(_footprint_planner.initial_footpoint.datas[i]);
+    end_footpoint.push_back(_footprint_planner.end_footpoint.datas[i]);
+  }
 
   //単脚支持期の時間を設定
   Tssp = _Tssp;
@@ -28,7 +37,7 @@ void TrajectoryPlanner::InitializeTrajectoryPlanner(Vector3 CoMin, Vector3 vCoMi
   n = 0;
 }
 
-void TrajectoryPlanner::SetCMPandCP(vector<FootprintData> support_point){
+void TrajectoryPlanner::SetCMPandCP(){
   //CMP,VRP,CPin,CPenを求める。
   //これがないと軌道が求められない
 
@@ -80,4 +89,15 @@ void TrajectoryPlanner::SSPtrajectory(){
     t = 0.0;
     n += 1;
   }
+}
+
+void TrajectoryPlanner::LegTrajectory(){
+  //足首軌道生成
+  int i=0;
+
+
+}
+
+void TrajectoryPlanner::AllTrajectoryPlanner(){
+  int i=0;
 }

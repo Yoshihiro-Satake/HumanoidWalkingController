@@ -1,5 +1,5 @@
 #include "Trajectory_planner.h"
-#include "Footprint_planner.h"
+//#include "Footprint_planner.h"
 #include<cnoid/SimpleController>
 #include<cnoid/Body>
 #include<cnoid/EigenTypes>
@@ -84,11 +84,10 @@ public:
 
     //着地位置計画クラスを初期化
     footprint_planner.InitializeFootPrintPlanner(support_footpoint, sup_RoL, initial_footpoint, end_footpoint);
-    vector<FootprintData> support_point = footprint_planner.support_point.datas;
 
     //軌道生成クラスを初期化
-    trajectory_planner.InitializeTrajectoryPlanner(CoMin, vCoMin, Tssp, zVRP, dt);
-    trajectory_planner.SetCMPandCP(support_point);
+    trajectory_planner.InitializeTrajectoryPlanner(footprint_planner, CoMin, vCoMin, Tssp, zVRP, dt);
+    trajectory_planner.SetCMPandCP();
     return true;
   }
   virtual bool control() override

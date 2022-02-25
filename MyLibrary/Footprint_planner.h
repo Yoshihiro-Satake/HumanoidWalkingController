@@ -1,5 +1,5 @@
-#ifndef FOOTSTEP_PLAMMER_H_
-#define FOOTSTEP_PLANNER_H_
+#ifndef FOOTPRINT_PLAMMER_H_
+#define FOOTPRINT_PLANNER_H_
 
 #include "Footprint.h"
 #include<iostream>
@@ -20,7 +20,7 @@ public:
   Footprints end_footpoint;     //シミュレーション終了時の足の位置姿勢
 
   void InitializeFootPrintPlanner(vector<vector<double>> sup_data, int sup_RoL,
-                                 vector<vector<double>> ini_data,
-                                 vector<vector<double>> end_data);
+                                  vector<vector<double>> ini_data,
+                                  vector<vector<double>> end_data);
 };
 #endif
