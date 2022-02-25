@@ -116,7 +116,7 @@ public:
     joint[12]->q_target() = -30*pi/180;
     joint[13]->q_target() = 0.0;
 
-    trajectory_planner.SSPtrajectory();
+    trajectory_planner.AllTrajectoryPlanner();
 
     cout << "," << trajectory_planner.t << "," << trajectory_planner.CoM_d[0] << endl;
     //cout << "|" << trajectory_planner.VRP_d[0][1] << "," << trajectory_planner.CPin_d[0][1] << "|" << trajectory_planner.VRP_d[1][1] << "," << trajectory_planner.CPin_d[1][1] << "|" << trajectory_planner.CPin_d[2][1] << endl;

@@ -66,6 +66,26 @@ void TrajectoryPlanner::SSPtrajectory(){
   //満を持して登場、軌道生成関数
   //オンラインで軌道生成する。
 
+  //以下の値は時刻tのときの値
+
+  //重心位置を少し動かす
+  CoM_d += vCoM_d*dt;
+  //CPを少し動かす.式9
+  CP_d = VRP_d[n] + exp((t-Tssp)/b)*(CPen_d[n] - VRP_d[n]);
+  //CP速度を求める。式5
+  vCP_d = 1/b*(CP_d - VRP_d[n]);
+  //重心速度を求める。式2
+  vCoM_d = -1/b*(CoM_d - CP_d);
+}
+
+void TrajectoryPlanner::LegTrajectory(){
+  //足首軌道生成
+  //Ankle_d[support_point[n]]
+  int i = 0;
+
+}
+
+void TrajectoryPlanner::AllTrajectoryPlanner(){
   //nが最大歩幅Nmaxに到達したら値を更新しない
   if(n>=Nmax){
     t += 0.001;
@@ -73,31 +93,16 @@ void TrajectoryPlanner::SSPtrajectory(){
   else{
     //時間を進める。
     t += 0.001;
-    //以下の値は時刻tのときの値
-
-    //重心位置を少し動かす
-    CoM_d += vCoM_d*dt;
-    //CPを少し動かす.式9
-    CP_d = VRP_d[n] + exp((t-Tssp)/b)*(CPen_d[n] - VRP_d[n]);
-    //CP速度を求める。式5
-    vCP_d = 1/b*(CP_d - VRP_d[n]);
-    //重心速度を求める。式2
-    vCoM_d = -1/b*(CoM_d - CP_d);
+    if(t < Tssp){
+      //SSPの重心とCPの軌道生成
+      SSPtrajectory();
+      //遊脚軌道生成
+      LegTrajectory();
+    }
   }
-    //tがTssp-0.001に到達したらtを0にリセット、歩数nを1つ進める
+  //tがTssp-0.001に到達したらtを0にリセット、歩数nを1つ進める
   if(t >= Tssp){
     t = 0.0;
     n += 1;
   }
-}
-
-void TrajectoryPlanner::LegTrajectory(){
-  //足首軌道生成
-  int i=0;
-
-
-}
-
-void TrajectoryPlanner::AllTrajectoryPlanner(){
-  int i=0;
 }
