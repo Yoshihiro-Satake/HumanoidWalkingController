@@ -6,6 +6,7 @@
 #include<iostream>
 #include<cnoid/EigenTypes>
 #include<vector>
+#include<Eigen/Core>
 #include<deque>
 using namespace std;
 using namespace cnoid;
@@ -19,17 +20,25 @@ public:
   //重心に関するパラメータ
   Vector3  CoM_d;           //目標重心位置
   Vector3 vCoM_d;           //目標重心速度
+
   //CPに関するパラメータ
   Vector3   CP_d;           //目標CP位置
   Vector3  vCP_d;           //目標CP速度
   deque<Vector3> CPin_d;    //目標CP初期位置
   deque<Vector3> CPen_d;    //目標CP終端位置
+
   //ZMP,CMP,に関するパラメータ
   vector<Vector3>  CMP_d;   //目標CMP位置
   vector<Vector3>  VRP_d;   //目標VRP位置
-  //ゆう客に関するパラメータ
-  vector<Vector3> Ankle_d[2]; //目標足首座標
-  Matrix3d FootRotation_d[2]; //目標足姿勢
+
+  //遊脚に関するパラメータ
+  //何故か下のように初期化しないと使えない
+  //vector<Vector3> Ankle_d(2);  <ーこれで初期化できない。理由は不明
+  vector<Vector3> Ankle_d = {Vector3(0.0,0.0,0.0),
+                             Vector3(0.0,0.0,0.0)};             //目標足首座標
+  vector<Matrix3d> FootRotation_d = {MatrixXd::Identity(3,3),
+                                     MatrixXd::Identity(3,3)};  //目標足姿勢
+
   //以下がFootstepplannerからの入力となる
   vector<FootprintData> support_point;     //支持脚位置
   vector<FootprintData> initial_footpoint; //足の初期位置
@@ -47,7 +56,12 @@ public:
   double g = 9.81;
   double pi = 3.141592;
 
-  void InitializeTrajectoryPlanner(FootPrintPlanner _footprint_planner, Vector3 CoMin, Vector3 vCoMin, double _Tssp, double _zVRP, double _dt);
+  void InitializeTrajectoryPlanner(FootPrintPlanner _footprint_planner,
+                                   Vector3 CoMin,
+                                   Vector3 vCoMin,
+                                   double _Tssp,
+                                   double _zVRP,
+                                   double _dt);
   void SetCMPandCP();
   void SSPtrajectory();
   void LegTrajectory();

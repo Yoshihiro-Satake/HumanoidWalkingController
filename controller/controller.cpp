@@ -120,7 +120,7 @@ public:
 
     cout << "," << trajectory_planner.t << "," << trajectory_planner.CoM_d[0] << endl;
     //cout << "|" << trajectory_planner.VRP_d[0][1] << "," << trajectory_planner.CPin_d[0][1] << "|" << trajectory_planner.VRP_d[1][1] << "," << trajectory_planner.CPin_d[1][1] << "|" << trajectory_planner.CPin_d[2][1] << endl;
-    ofs << trajectory_planner.CoM_d[0] << "," << trajectory_planner.CoM_d[1] << "," << trajectory_planner.CP_d[0] << "," << trajectory_planner.CP_d[1] << endl;
+    ofs << trajectory_planner.Ankle_d[0][0] << "," << trajectory_planner.Ankle_d[0][1] << "," << trajectory_planner.Ankle_d[0][2] << "," << trajectory_planner.CoM_d[0] << endl;
 
     //時間を進める
     total_t += 0.001;
