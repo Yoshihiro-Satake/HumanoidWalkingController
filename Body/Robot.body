@@ -33,7 +33,7 @@ links:
         type: RateGyroSensor
         translation: [0, 0, 0]
         name: WaistGyro
-        id: 0
+        id: 1
 
   -
     name: RLEG_J1
@@ -172,7 +172,7 @@ links:
     jointId: 7
     jointRange: [-90, 90]
     translation: [0, 0, 0]
-    centerOfMass: [0, 0, -0.75]   #足リンクの中心
+    centerOfMass: [0, 0, -0.075]   #足リンクの中心
     mass: 0.01
     inertia: [
       0.01,    0,    0,
@@ -195,6 +195,11 @@ links:
             appearance:
               material:
                 diffuseColor: [0.8, 0.8, 0.8]
+      -
+        type: ForceSensor
+        translation: [0.0, 0.0, 0.0]
+        name: RightAnkleForceSensor
+        id: 2
 
 #左足
   -
@@ -345,3 +350,8 @@ links:
         rotation: [0, 0, 1, 0]
         elements:
           Shape:  *FootShape
+      -
+        type: ForceSensor
+        translation: [0.0, 0.0, 0.0]
+        name: LeftAnkleForceSensor
+        id: 3

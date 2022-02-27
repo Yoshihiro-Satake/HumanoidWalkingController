@@ -1,4 +1,5 @@
 #include "Trajectory_planner.h"
+#include "IK.h"
 //#include "Footprint_planner.h"
 #include<cnoid/SimpleController>
 #include<cnoid/Body>
@@ -34,6 +35,8 @@ class Biped_Online_Controller_test : public SimpleController
   FootPrintPlanner footprint_planner;
   //テスト：Trajectory_planner.cppのバグを発見するため
   TrajectoryPlanner trajectory_planner;
+  //テスト：IKのバグを発見するため
+  IK iksolver;
   //値確認用
   ofstream ofs;
 
@@ -56,6 +59,12 @@ class Biped_Online_Controller_test : public SimpleController
   const double Tssp = 0.800;
   const double dt = 0.001;
   const double pi = 3.141592;
+  //IKに必要なロボットの固有パラメータ
+  const double l1 = 0.3;  //股関節から膝までの長さ
+  const double l2 = 0.3;  //膝から足首まで
+  Vector3 west2hip2 = Vector3(0.0, -0.15, -0.1);
+  Vector3 west2hip8 = Vector3(0.0,  0.15, -0.1);
+  Vector3 west2CoM = Vector3(0.0, 0.0, 0.0);
 
 public:
   virtual bool initialize(SimpleControllerIO* io) override
@@ -88,6 +97,9 @@ public:
     //軌道生成クラスを初期化
     trajectory_planner.InitializeTrajectoryPlanner(footprint_planner, CoMin, vCoMin, Tssp, zVRP, dt);
     trajectory_planner.SetCMPandCP();
+
+    //IKを初期化
+    iksolver.InitializeIK(l1, l2, west2hip2, west2hip8, west2CoM);
     return true;
   }
   virtual bool control() override
@@ -117,10 +129,13 @@ public:
     joint[13]->q_target() = 0.0;
 
     trajectory_planner.AllTrajectoryPlanner();
+    iksolver.IKLeg(trajectory_planner.Ankle_d, trajectory_planner.FootRotation_d, trajectory_planner.CoM_d);
 
-    cout << "," << trajectory_planner.t << "," << trajectory_planner.CoM_d[0] << endl;
+    //cout << "," << trajectory_planner.t << "," << trajectory_planner.CoM_d[0] << endl;
     //cout << "|" << trajectory_planner.VRP_d[0][1] << "," << trajectory_planner.CPin_d[0][1] << "|" << trajectory_planner.VRP_d[1][1] << "," << trajectory_planner.CPin_d[1][1] << "|" << trajectory_planner.CPin_d[2][1] << endl;
-    ofs << trajectory_planner.Ankle_d[0][0] << "," << trajectory_planner.Ankle_d[0][1] << "," << trajectory_planner.Ankle_d[0][2] << "," << trajectory_planner.CoM_d[0] << endl;
+    cout << "|" << trajectory_planner.FootRotation_d[0](0,0) << endl;
+    //ofs << trajectory_planner.Ankle_d[0][0] << "," << trajectory_planner.Ankle_d[0][1] << "," << trajectory_planner.Ankle_d[0][2] << "," << trajectory_planner.CoM_d[0] << endl;
+    ofs << iksolver.q[1] << "," << iksolver.q[5] << endl;
 
     //時間を進める
     total_t += 0.001;
