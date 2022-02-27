@@ -24,7 +24,18 @@ void IK::IKLeg(vector<Vector3> Ankle, vector<Matrix3d> FootRotation, Vector3 CoM
   //足首から見た股関節の位置ベクトル
   Vector3 RightAnkle2hip2 = R7T.transpose()*(hip2 - Ankle[0]);
   Vector3 LeftAnkle2hip8  = R13T.transpose()*(hip8 - Ankle[1]);
+  //ノルム
   double C2 = RightAnkle2hip2.norm();
   double C8 = LeftAnkle2hip8.norm();
+  //膝の角度
   q[5] = -acos((l1*l1 + l2*l2 - C2*C2)/(2*l1*l2)) + pi;
+  q[11] = -acos((l1*l1 + l2*l2 - C8*C8)/(2*l1*l2)) + pi;
+  //足首
+  double alphaRight = asin(l1*sin(pi-q[5])/C2);
+  double alphaLeft = asin(l1*sin(pi-q[11])/C8);
+  q[7] = atan2(RightAnkle2hip2[1],RightAnkle2hip2[2]);
+  q[13] = atan2(LeftAnkle2hip8[1],LeftAnkle2hip8[2]);
+  q[6] = -atan2(RightAnkle2hip2[0], RightAnkle2hip2[2]*sqrt(RightAnkle2hip2[1]*RightAnkle2hip2[1]+RightAnkle2hip2[2]*RightAnkle2hip2[2]))-alphaRight;
+  q[12] = -atan2(LeftAnkle2hip8[0], LeftAnkle2hip8[2]*sqrt(LeftAnkle2hip8[1]*LeftAnkle2hip8[1]+LeftAnkle2hip8[2]*LeftAnkle2hip8[2]))-alphaLeft;
+
 }
