@@ -44,17 +44,18 @@ class Biped_Online_Controller_test : public SimpleController
   //Vector6がめちゃくちゃ使いにくいので苦肉の策でvector<vector>
   //もはやVector3を２倍用意したほうがいいのか？
   vector<vector<double>> support_footpoint = {{0.0,   0.15, 0.0, 0.0, 0.0, 0.0},
-                                              {0.15, -0.15, 0.0, 0.0, 0.0, 0.0},
-                                              {0.15,  0.15, 0.0, 0.0, 0.0, 0.0}};
+                                              {0.15, -0.10, 0.0, 0.0, 0.0, 0.0},
+                                              {0.30,  0.10, 0.0, 0.0, 0.0, 0.0},
+                                              {0.45, -0.10, 0.0, 0.0, 0.0, 0.0}};
   int sup_RoL =  1; //左足支持からスタート
   vector<vector<double>> initial_footpoint = {{0.0, -0.15, 0.0, 0.0, 0.0, 0.0},
                                               {0.0,  0.15, 0.0, 0.0, 0.0, 0.0}};
-  vector<vector<double>> end_footpoint = {{0.15, -0.15, 0.0, 0.0, 0.0, 0.0},
-                                          {0.15,  0.15, 0.0, 0.0, 0.0, 0.0}};
+  vector<vector<double>> end_footpoint = {{0.45, -0.10, 0.0, 0.0, 0.0, 0.0},
+                                          {0.45,  0.10, 0.0, 0.0, 0.0, 0.0}};
 
   //以下軌道生成に必要なパラメータ
   const double zVRP = 0.75;
-  Vector3 CoMin = Vector3(0.0, 0.0, zVRP);
+  Vector3 CoMin = Vector3(0.05, 0.15, zVRP);
   Vector3 vCoMin = Vector3(0.0, 0.0, 0.0);
   const double Tssp = 0.800;
   const double dt = 0.001;
@@ -115,27 +116,31 @@ public:
       joint[i] = ioBody->joint(i);
     }
     //テスト用に角度を固定する
-    joint[2]->q_target() = 0.0;
-    joint[3]->q_target() = 0.0;
-    joint[4]->q_target() = -30*pi/180;
-    joint[5]->q_target() = 60*pi/180;
-    joint[6]->q_target() = -30*pi/180;
-    joint[7]->q_target() = 0.0;
-    joint[8]->q_target() = 0.0;
-    joint[9]->q_target() = 0.0;
-    joint[10]->q_target() = -30*pi/180;
-    joint[11]->q_target() = 60*pi/180;
-    joint[12]->q_target() = -30*pi/180;
-    joint[13]->q_target() = 0.0;
+    //joint[2]->q_target() = 0.0;
+    //joint[3]->q_target() = 0.0;
+    //joint[4]->q_target() = -30*pi/180;
+    //joint[5]->q_target() = 60*pi/180;
+    //joint[6]->q_target() = -30*pi/180;
+    //joint[7]->q_target() = 0.0;
+    //joint[8]->q_target() = 0.0;
+    //joint[9]->q_target() = 0.0;
+    //joint[10]->q_target() = -30*pi/180;
+    //joint[11]->q_target() = 60*pi/180;
+    //joint[12]->q_target() = -30*pi/180;
+    //joint[13]->q_target() = 0.0;
 
     trajectory_planner.AllTrajectoryPlanner();
     iksolver.IKLeg(trajectory_planner.Ankle_d, trajectory_planner.FootRotation_d, trajectory_planner.CoM_d);
+
+    for(int i=2;i<14;i++){
+      joint[i]->q_target() = iksolver.q[i];
+    }
 
     //cout << "," << trajectory_planner.t << "," << trajectory_planner.CoM_d[0] << endl;
     //cout << "|" << trajectory_planner.VRP_d[0][1] << "," << trajectory_planner.CPin_d[0][1] << "|" << trajectory_planner.VRP_d[1][1] << "," << trajectory_planner.CPin_d[1][1] << "|" << trajectory_planner.CPin_d[2][1] << endl;
     cout << "|" << trajectory_planner.FootRotation_d[0](0,0) << endl;
     //ofs << trajectory_planner.Ankle_d[0][0] << "," << trajectory_planner.Ankle_d[0][1] << "," << trajectory_planner.Ankle_d[0][2] << "," << trajectory_planner.CoM_d[0] << endl;
-    ofs << iksolver.q[5] << "," << iksolver.q[6] << endl;
+    //ofs << iksolver.q[5] << "," << iksolver.q[6] << endl;
 
     //時間を進める
     total_t += 0.001;

@@ -122,7 +122,7 @@ void TrajectoryPlanner::LegTrajectory(){
   pi = 3.141592;
   double theta = t*2*pi/Tssp;
   Ankle_d[1-i] = (next_landing_Ankle_d - pre_landing_Ankle_d)/(2*pi)*(theta - sin(theta)) + pre_landing_Ankle_d;
-  Ankle_d[1-i][2] = max(next_landing_Ankle_d[2], pre_landing_Ankle_d[2])*1.3*(1-cos(theta)) + pre_landing_Ankle_d[2];
+  Ankle_d[1-i][2] = max(next_landing_Ankle_d[2], pre_landing_Ankle_d[2])*0.2*(1-cos(theta)) + pre_landing_Ankle_d[2];
   //今は回転は考慮しないことにする
   //１軸回転法で計画する
   FootRotation_d[1-i] = support_point[n].R;

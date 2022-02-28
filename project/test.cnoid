@@ -50,25 +50,25 @@ items:
             file: "../Body/Robot.body"
             format: CHOREONOID-BODY
             currentBaseLink: "LLEG_J6"
-            rootPosition: [ -3.33066907e-17, 0, 0.719615242 ]
+            rootPosition: [ 0.0498731455, 0.150421535, 0.749848524 ]
             rootAttitude: [ 
-              1, 0, -5.55111512e-17, 
-              0, 1, 0, 
-              5.55111512e-17, 0, 1 ]
+              1, 2.54268866e-17, 3.95048851e-12, 
+              -2.08166817e-17, 1, 0, 
+              -3.95050659e-12, 0, 1 ]
             jointDisplacements: [ 
-              0, 0, 0, 0, -30, 60, -30, 0, 0, 0, 
-              -30, 60, -30, 0 ]
+              0, 0, 0, -15.3, -12.5, 35, -22.5, 15.3, 0, -15.3, 
+              -12.5, 35, -22.5, 15.3 ]
             jointPositions: [ 
-              0, 0, 0, 0, -0.523599, 1.0472, -0.523599, 0, 0, 0, 
-              -0.523599, 1.0472, -0.523599, 0 ]
-            initialRootPosition: [ -3.33066907e-17, 0, 0.719615242 ]
+              0, 0, 0, -0.267035, -0.218166, 0.610865, -0.392699, 0.267035, 0, -0.267035, 
+              -0.218166, 0.610865, -0.392699, 0.267035 ]
+            initialRootPosition: [ 0.0498731455, 0.150421535, 0.749848524 ]
             initialRootAttitude: [ 
-              1, -0, -5.55111512e-17, 
-              0, 1, -0, 
-              5.55111512e-17, 0, 1 ]
+              1, 2.31217842e-17, 3.95049755e-12, 
+              -2.31217842e-17, 1, -4.56712758e-29, 
+              -3.95049755e-12, -4.56712758e-29, 1 ]
             initialJointPositions: [ 
-              0, 0, 0, 0, -0.523599, 1.0472, -0.523599, 0, 0, 0, 
-              -0.523599, 1.0472, -0.523599, 0 ]
+              0, 0, 0, -0.267035, -0.218166, 0.610865, -0.392699, 0.267035, 0, -0.267035, 
+              -0.218166, 0.610865, -0.392699, 0.267035 ]
             staticModel: false
             collisionDetection: true
             selfCollisionDetection: false
@@ -91,7 +91,8 @@ items:
               data: 
                 isNoDelayMode: false
                 controllerOptions: ""
-                baseDirectory: "Controller directory"
+                controller: "${HOME}/choreonoid/build/lib/choreonoid-1.8/simplecontroller/Biped_Online_Controller_test"
+                baseDirectory: "None"
                 reloading: false
                 exportSymbols: false
                 isOldTargetVariableMode: false
@@ -161,7 +162,7 @@ views:
     class: SceneView
     mounted: true
     state: 
-      editMode: true
+      editMode: false
       viewpointControlMode: thirdPerson
       highlighting: false
       collisionLines: false
@@ -201,9 +202,9 @@ views:
           fieldOfView: 0.610865
           near: 0.04
           far: 200
-          eye: [ 2.32949, -1.90837, 1.90304 ]
-          direction: [ -0.713395, 0.584429, -0.386666 ]
-          up: [ -0.29911, 0.245038, 0.92222 ]
+          eye: [ 2.7645, -0.614402, 0.9747 ]
+          direction: [ -0.937767, 0.255855, -0.234801 ]
+          up: [ -0.226521, 0.0618027, 0.972044 ]
         - 
           camera: [ System, Orthographic ]
           orthoHeight: 20
@@ -269,16 +270,6 @@ views:
     class: PythonConsoleView
     mounted: true
 toolbars: 
-  "TimeBar": 
-    minTime: 0
-    maxTime: 30
-    frameRate: 1000
-    playbackFrameRate: 60
-    idleLoopDrivenMode: false
-    currentTime: 0
-    speedScale: 1
-    syncToOngoingUpdates: true
-    autoExpansion: true
   "BodyMotionGenerationBar": 
     autoGenerationForNewBody: true
     balancer: false
@@ -312,6 +303,16 @@ toolbars:
     waistHeightRelaxation: false
     gravity: 9.8
     dynamicsTimeRatio: 1
+  "TimeBar": 
+    minTime: 0
+    maxTime: 30
+    frameRate: 1000
+    playbackFrameRate: 60
+    idleLoopDrivenMode: false
+    currentTime: 0
+    speedScale: 1
+    syncToOngoingUpdates: true
+    autoExpansion: true
   "LeggedBodyBar": 
     stanceWidth: 0.15
   "KinematicsBar": 

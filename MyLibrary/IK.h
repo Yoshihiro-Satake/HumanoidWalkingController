@@ -10,6 +10,8 @@ using namespace cnoid;
 class IK{
 public:
   //股関節は英語でhip joint
+  //west2hip2の真ん中の２はto
+  //west2hip2の後ろの2はjointIDの2
   Vector3 west2hip2;   //右股関節の腰リンクからみた位置
   Vector3 west2hip8;   //左股関節の腰リンクからみた位置
   Vector3 west2CoM;      //腰リンクから見た重心位置
