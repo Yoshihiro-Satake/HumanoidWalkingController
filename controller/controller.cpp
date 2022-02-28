@@ -159,7 +159,7 @@ public:
 
     //cout << "," << trajectory_planner.t << "," << trajectory_planner.CoM_d[0] << endl;
     //cout << "|" << trajectory_planner.VRP_d[0][1] << "," << trajectory_planner.CPin_d[0][1] << "|" << trajectory_planner.VRP_d[1][1] << "," << trajectory_planner.CPin_d[1][1] << "|" << trajectory_planner.CPin_d[2][1] << endl;
-    cout << sensors.CoM[0] << "|" << sensors.vCoM[0]  << endl;
+    cout << sensors.CoM[0] << "|" << sensors.vCoM[0]  << "|" << sensors.CP[0] << "|" <<endl;
     //ofs << trajectory_planner.Ankle_d[0][0] << "," << trajectory_planner.Ankle_d[0][1] << "," << trajectory_planner.Ankle_d[0][2] << "," << trajectory_planner.CoM_d[0] << endl;
     //ofs << iksolver.q[5] << "," << iksolver.q[6] << endl;
 

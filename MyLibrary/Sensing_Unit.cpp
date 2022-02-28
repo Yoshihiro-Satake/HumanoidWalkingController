@@ -15,4 +15,6 @@ void Sensors::Sensing(BodyPtr ioBody){
   //重心、CPの位置速度を計測して計算する
   CoM = ioBody->calcCenterOfMass();
   vCoM += CoMAccelSensor->dv()*0.001;
+  CP = CoM + sqrt(CoM[2]/g)*vCoM;
+  vCP = vCoM + 1/sqrt(CoM[2]/g)*CoMAccelSensor->dv();
 }

@@ -22,5 +22,6 @@ public:
                          ForceSensorPtr _RightAnkleForceSensor,
                          AccelerationSensorPtr _CoMAccelSensor);
   void Sensing(BodyPtr ioBody);
+  double g = 9.81;
 };
 #endif
