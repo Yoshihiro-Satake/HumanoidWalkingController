@@ -5,6 +5,7 @@
 #include "Footprint_planner.h"
 #include<iostream>
 #include<cnoid/EigenTypes>
+#include<cnoid/JointPath>
 #include<vector>
 #include<Eigen/Core>
 #include<deque>
@@ -47,6 +48,7 @@ public:
   //その他歩行に関するパラメータ
   int Nmax;                //歩数
   int n;                   //今何歩目かカウントする
+  int i;                   //右足化左足のどちらが支持脚か
   double zVRP;             //ΔZvrp
   double Tssp;             //SSPの時間
   double b;                //時定数

@@ -82,7 +82,7 @@ void TrajectoryPlanner::LegTrajectory(){
   //足首軌道生成
   //サイクロイドで生成。階段など床が平らでない場合は軌道背性ができないけど、それは制御でなんとかして
 
-  int i = support_point[n].RightOrLeft; //支持脚がどちらか判定。簡略化のためiとおく
+  i = support_point[n].RightOrLeft; //支持脚がどちらか判定。簡略化のためiとおく
   Vector3 pre_landing_point;            //前の着地点
   Vector3 next_landing_point;           //次の着地点
   Matrix3d pre_landing_R;               //前の足の姿勢

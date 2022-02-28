@@ -1,5 +1,6 @@
 #include "Trajectory_planner.h"
 #include "IK.h"
+#include "Sensing_Unit.h"
 //#include "Footprint_planner.h"
 #include<cnoid/SimpleController>
 #include<cnoid/Body>
@@ -28,6 +29,10 @@ class Biped_Online_Controller_test : public SimpleController
   JointPath supLeg2swingLeg;
   //シミュレータクラス
   SimpleControllerIO* io;
+  //センサたち
+  ForceSensorPtr LeftAnkleForceSensor;
+  ForceSensorPtr RightAnkleForceSensor;
+  AccelerationSensorPtr CoMAccelSensor;
   //シミュレータに関する値
   double startTime;
   double total_t = 0.0;
@@ -37,6 +42,8 @@ class Biped_Online_Controller_test : public SimpleController
   TrajectoryPlanner trajectory_planner;
   //テスト：IKのバグを発見するため
   IK iksolver;
+  //テスト：Sensorsのバグを発見するため
+  Sensors sensors;
   //値確認用
   ofstream ofs;
 
@@ -75,6 +82,14 @@ public:
     ostream& os = io->os();
     //ボディオブジェクト生成
     ioBody = io->body();
+    //センサ生成
+    LeftAnkleForceSensor = ioBody->findDevice<ForceSensor>("LeftAnkleForceSensor");
+    RightAnkleForceSensor = ioBody->findDevice<ForceSensor>("RightAnkleForceSensor");
+    CoMAccelSensor = ioBody->findDevice<AccelerationSensor>("WaistAccelSensor");
+    //上記のデバイスをコントローラに入力可能とする
+    io->enableInput(LeftAnkleForceSensor);
+    io->enableInput(RightAnkleForceSensor);
+    io->enableInput(CoMAccelSensor);
 
     Link* joint = ioBody->joint(1);
     io->enableInput(joint, Link::LinkPosition);
@@ -101,6 +116,9 @@ public:
 
     //IKを初期化
     iksolver.InitializeIK(l1, l2, west2hip2, west2hip8, west2CoM);
+
+    //Sensorsを初期化
+    sensors.InitializeSensors(LeftAnkleForceSensor, RightAnkleForceSensor, CoMAccelSensor);
     return true;
   }
   virtual bool control() override
@@ -115,30 +133,33 @@ public:
     for(int i=1; i <= ioBody->numJoints(); ++i){
       joint[i] = ioBody->joint(i);
     }
-    //テスト用に角度を固定する
-    //joint[2]->q_target() = 0.0;
-    //joint[3]->q_target() = 0.0;
-    //joint[4]->q_target() = -30*pi/180;
-    //joint[5]->q_target() = 60*pi/180;
-    //joint[6]->q_target() = -30*pi/180;
-    //joint[7]->q_target() = 0.0;
-    //joint[8]->q_target() = 0.0;
-    //joint[9]->q_target() = 0.0;
-    //joint[10]->q_target() = -30*pi/180;
-    //joint[11]->q_target() = 60*pi/180;
-    //joint[12]->q_target() = -30*pi/180;
-    //joint[13]->q_target() = 0.0;
-
+    //軌道を生成
     trajectory_planner.AllTrajectoryPlanner();
+    //逆運動学
     iksolver.IKLeg(trajectory_planner.Ankle_d, trajectory_planner.FootRotation_d, trajectory_planner.CoM_d);
-
+    //ロボットへ関節角度を入力
     for(int i=2;i<14;i++){
       joint[i]->q_target() = iksolver.q[i];
     }
+    //順運動学でリンク位置更新をする
+    //まずは支持脚から末端リンクまでのジョイントパスを取得する
+    if(trajectory_planner.i == 0){
+      supLeg2swingLeg = JointPath(ioBody->link("RLEG_J6"), ioBody->link("LLEG_J6"));
+    }
+    else{
+      supLeg2swingLeg = JointPath(ioBody->link("LLEG_J6"), ioBody->link("RLEG_J6"));
+    }
+    //取得したジョイントパスで支持脚をベースとして順運動学を行う
+    //これをしないとベースリンク(腰リンク)が空中に固定されて足だけが動く感じになる
+    supLeg2swingLeg.calcForwardKinematics(true,true);
+    //ベースリンクの位置が更新されたら再度順運動学
+    ioBody->calcForwardKinematics(true,true);
+    //値をセンシング
+    sensors.Sensing(ioBody);
 
     //cout << "," << trajectory_planner.t << "," << trajectory_planner.CoM_d[0] << endl;
     //cout << "|" << trajectory_planner.VRP_d[0][1] << "," << trajectory_planner.CPin_d[0][1] << "|" << trajectory_planner.VRP_d[1][1] << "," << trajectory_planner.CPin_d[1][1] << "|" << trajectory_planner.CPin_d[2][1] << endl;
-    cout << "|" << trajectory_planner.FootRotation_d[0](0,0) << endl;
+    cout << sensors.CoM[0] << "|" << sensors.vCoM[0]  << endl;
     //ofs << trajectory_planner.Ankle_d[0][0] << "," << trajectory_planner.Ankle_d[0][1] << "," << trajectory_planner.Ankle_d[0][2] << "," << trajectory_planner.CoM_d[0] << endl;
     //ofs << iksolver.q[5] << "," << iksolver.q[6] << endl;
 

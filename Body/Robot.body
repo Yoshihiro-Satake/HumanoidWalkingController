@@ -121,7 +121,7 @@ links:
     jointType: revolute
     jointAxis: [0, 1, 0]
     jointId: 5
-    jointRange: [-90, 90]
+    jointRange: [-150, 150]
     translation: [0, 0, -0.3]
     centerOfMass: [0, 0, -0.15]   #足リンクの中心
     mass: 0.01
@@ -280,7 +280,7 @@ links:
     jointType: revolute
     jointAxis: [0, 1, 0]
     jointId: 11
-    jointRange: [-90, 90]
+    jointRange: [-150, 150]
     translation: [0, 0, -0.3]
     centerOfMass: [0, 0, -0.15]   #足リンクの中心
     mass: 0.01

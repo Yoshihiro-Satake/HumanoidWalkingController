@@ -3,6 +3,7 @@ set(MYNOID_HEADERS
     "Footprint.h"
     "Footprint_planner.h"
     "IK.h"
+    "Sensing_Unit.h"
     )
 
 set(MYNOID_SOURCES
@@ -10,6 +11,7 @@ set(MYNOID_SOURCES
      "Footprint.cpp"
      "Footprint_planner.cpp"
      "IK.cpp"
+     "Sensing_Unit.cpp"
      )
 
 choreonoid_add_library(mynoid_lib STATIC ${MYNOID_HEADERS} ${MYNOID_SOURCES})
