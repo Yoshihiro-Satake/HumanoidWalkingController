@@ -3,12 +3,13 @@
 using namespace cnoid;
 using namespace std;
 
-void Sensors::InitializeSensors(ForceSensorPtr _LeftAnkleForceSensor, ForceSensorPtr _RightAnkleForceSensor, AccelerationSensorPtr _CoMAccelSensor){
+void Sensors::InitializeSensors(ForceSensorPtr _LeftAnkleForceSensor, ForceSensorPtr _RightAnkleForceSensor, AccelerationSensorPtr _CoMAccelSensor, Vector3 CoMin){
   LeftAnkleForceSensor = _LeftAnkleForceSensor;
   RightAnkleForceSensor = _RightAnkleForceSensor;
   CoMAccelSensor = _CoMAccelSensor;
   vCoM = Vector3(0.0, 0.0, 0.0);
   vCP = Vector3(0.0, 0.0, 0.0);
+  CP = CoMin;
 }
 
 void Sensors::Sensing(BodyPtr ioBody){
@@ -16,5 +17,5 @@ void Sensors::Sensing(BodyPtr ioBody){
   CoM = ioBody->calcCenterOfMass();
   vCoM += CoMAccelSensor->dv()*0.001;
   CP = CoM + sqrt(CoM[2]/g)*vCoM;
-  vCP = vCoM + 1/sqrt(CoM[2]/g)*CoMAccelSensor->dv();
+  vCP = vCoM + sqrt(CoM[2]/g)*CoMAccelSensor->dv();
 }

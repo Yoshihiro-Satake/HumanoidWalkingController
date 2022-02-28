@@ -20,7 +20,8 @@ public:
   Vector3 vCP;    //実際のCP速度
   void InitializeSensors(ForceSensorPtr _LeftAnkleForceSensor,
                          ForceSensorPtr _RightAnkleForceSensor,
-                         AccelerationSensorPtr _CoMAccelSensor);
+                         AccelerationSensorPtr _CoMAccelSensor,
+                         Vector3 CoMin);
   void Sensing(BodyPtr ioBody);
   double g = 9.81;
 };

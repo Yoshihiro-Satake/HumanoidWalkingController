@@ -68,7 +68,7 @@ void TrajectoryPlanner::SSPtrajectory(){
 
   //以下の値は時刻tのときの値
 
-  //重心位置を少し動かす
+  //重心位置を少し動かす//stabilizer入れたらCoMは必要なくなった
   CoM_d += vCoM_d*dt;
   //CPを少し動かす.式9
   CP_d = VRP_d[n] + exp((t-Tssp)/b)*(CPen_d[n] - VRP_d[n]);

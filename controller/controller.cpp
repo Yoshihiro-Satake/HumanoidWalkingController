@@ -1,6 +1,7 @@
 #include "Trajectory_planner.h"
 #include "IK.h"
 #include "Sensing_Unit.h"
+#include "Stabilizer.h"
 //#include "Footprint_planner.h"
 #include<cnoid/SimpleController>
 #include<cnoid/Body>
@@ -36,20 +37,21 @@ class Biped_Online_Controller_test : public SimpleController
   //シミュレータに関する値
   double startTime;
   double total_t = 0.0;
-  //テスト：Footprint_planner.cppのバグ発見
+  //
   FootPrintPlanner footprint_planner;
-  //テスト：Trajectory_planner.cppのバグを発見するため
+  //
   TrajectoryPlanner trajectory_planner;
-  //テスト：IKのバグを発見するため
+  //
   IK iksolver;
-  //テスト：Sensorsのバグを発見するため
+  //
   Sensors sensors;
+  //テスト：Stabilizerのバグを発見する
+  Stabilizer stabilizer;
   //値確認用
   ofstream ofs;
 
   //以下足を踏み出す位置に関する値
   //Vector6がめちゃくちゃ使いにくいので苦肉の策でvector<vector>
-  //もはやVector3を２倍用意したほうがいいのか？
   vector<vector<double>> support_footpoint = {{0.0,   0.15, 0.0, 0.0, 0.0, 0.0},
                                               {0.15, -0.10, 0.0, 0.0, 0.0, 0.0},
                                               {0.30,  0.10, 0.0, 0.0, 0.0, 0.0},
@@ -118,7 +120,11 @@ public:
     iksolver.InitializeIK(l1, l2, west2hip2, west2hip8, west2CoM);
 
     //Sensorsを初期化
-    sensors.InitializeSensors(LeftAnkleForceSensor, RightAnkleForceSensor, CoMAccelSensor);
+    sensors.InitializeSensors(LeftAnkleForceSensor, RightAnkleForceSensor, CoMAccelSensor, CoMin);
+
+    //Stabilizerを初期化
+    stabilizer.InitializeStabilizer(CoMin);
+
     return true;
   }
   virtual bool control() override
@@ -135,8 +141,11 @@ public:
     }
     //軌道を生成
     trajectory_planner.AllTrajectoryPlanner();
+    //安定化制御器
+    stabilizer.Stabilize(trajectory_planner.CP_d, trajectory_planner.vCP_d, sensors.CP, sensors.vCP);
     //逆運動学
-    iksolver.IKLeg(trajectory_planner.Ankle_d, trajectory_planner.FootRotation_d, trajectory_planner.CoM_d);
+    //iksolver.IKLeg(trajectory_planner.Ankle_d, trajectory_planner.FootRotation_d, trajectory_planner.CoM_d);
+    iksolver.IKLeg(trajectory_planner.Ankle_d, trajectory_planner.FootRotation_d, stabilizer.CoM);
     //ロボットへ関節角度を入力
     for(int i=2;i<14;i++){
       joint[i]->q_target() = iksolver.q[i];
@@ -159,7 +168,10 @@ public:
 
     //cout << "," << trajectory_planner.t << "," << trajectory_planner.CoM_d[0] << endl;
     //cout << "|" << trajectory_planner.VRP_d[0][1] << "," << trajectory_planner.CPin_d[0][1] << "|" << trajectory_planner.VRP_d[1][1] << "," << trajectory_planner.CPin_d[1][1] << "|" << trajectory_planner.CPin_d[2][1] << endl;
-    cout << sensors.CoM[0] << "|" << sensors.vCoM[0]  << "|" << sensors.CP[0] << "|" <<endl;
+    //cout << sensors.CoM[0] << "|" << sensors.vCoM[0]  << "|" << sensors.vCP[0] << "|" <<endl;
+    //cout << stabilizer.VRP_mod[0] << "," << stabilizer.VRP_mod[1] << endl;
+    //cout << trajectory_planner.vCP_d[0] << "," << trajectory_planner.vCP_d[1] << endl;
+    cout << trajectory_planner.VRP_d[0][1] << "," << stabilizer.VRP_mod[1] << endl;
     //ofs << trajectory_planner.Ankle_d[0][0] << "," << trajectory_planner.Ankle_d[0][1] << "," << trajectory_planner.Ankle_d[0][2] << "," << trajectory_planner.CoM_d[0] << endl;
     //ofs << iksolver.q[5] << "," << iksolver.q[6] << endl;
 
