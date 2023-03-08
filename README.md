@@ -20,9 +20,9 @@ https://ieeexplore.ieee.org/abstract/document/6094435?casa_token=NhdUgzJ94owAAAA
 https://www.jstage.jst.go.jp/article/jrsj/36/2/36_36_122/_article/-char/ja/
 
 大事なことは
--Capture Pointはロボットの重心位置と速度から求まる床上の点．
--Capture PointはZMPに反発するように動き，重心はCapture Pointに追従するように動く．
--したがってCapture Pointの軌道を作れば重心とZMPの軌道が求まる．
+- Capture Pointはロボットの重心位置と速度から求まる床上の点．
+- Capture PointはZMPに反発するように動き，重心はCapture Pointに追従するように動く．
+- したがってCapture Pointの軌道を作れば重心とZMPの軌道が求まる．
 以上の3つ．Capture Pointの軌道を求めることで重心とZMPの両方の軌道が得られるのが利点．
 個人的には両脚支持期(Double Support Phase)を入れるのに非常に強力な手法だと感じた．
 
